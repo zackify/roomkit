@@ -38,6 +38,7 @@ impl HueBridge {
     let lights_endpoint = format!("{}{}", &self.bridge_url, "/lights");
     let body: LightResponse = reqwest::blocking::get(&lights_endpoint)?.json()?;
 
+    print!("getting lights");
     let light_ids: Vec<String> = body.keys().cloned().collect();
     self.light_ids = Some(light_ids);
     Ok(body)
