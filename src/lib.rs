@@ -1,3 +1,6 @@
+pub mod device;
+pub mod integrations;
+
 #[cfg(test)]
 mod tests {
     #[test]
