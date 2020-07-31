@@ -1,0 +1,13 @@
+[package]
+name = "roomkit"
+version = "0.1.0"
+authors = ["Zach Silveira <zackify@gmail.com>"]
+edition = "2018"
+description = "Open source home automation library"
+readme = "README.md"
+homepage = "https://roomkit.cli.rs/"
+repository = "https://github.com/zackify/roomkit"
+license = "MIT"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
