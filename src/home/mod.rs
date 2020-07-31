@@ -1,38 +1,43 @@
-use crate::device::Device;
-use crate::integrations::HueBridge;
+use crate::device::GenericDevice;
+use crate::integrations::Integration;
 
 pub struct Home {
-  pub devices: Vec<Device>,
+  pub integrations: Vec<Integration>,
 }
 
-pub struct Action<Type> {
-  device_name: String,
-  action: Box<dyn FnMut(Box<Type>)>,
+pub struct Action {
+  callback: Box<dyn FnMut(&mut Integration)>,
 }
 
 impl Home {
   pub fn initialize(&mut self) {
-    println!("Bringing {:?} devices online...", self.devices.len());
+    println!("Bringing {:?} devices online...", self.integrations.len());
 
     self
-      .devices
+      .integrations
       .iter_mut()
-      .for_each(|device| match device.initialize() {
-        Ok(_) => {
-          println!("Initialized {:?}", device.name());
-        }
-        Err(e) => println!("Failed to initialize {:?}: {:?}", device.name(), e),
+      .for_each(|integration| match integration {
+        Integration::Hue(hue) => match hue.initialize() {
+          Ok(_) => {
+            println!("Initialized {:?}", hue.name());
+          }
+          Err(e) => println!("Failed to initialize {:?}: {:?}", hue.name(), e),
+        },
+        _ => (),
       });
 
-    // let mut action = Action::<HueBridge> {
-    //   device_name: String::from("Hue Bridge"),
-    //   action: Box::new(|device| print!("in action {:?}", device.get_lights())),
-    // };
+    // find a way to write one that checks if room empty then hue light, etc use match
+    // to run methods from multiple devices
+    let mut action = Action {
+      callback: Box::new(|integration| match integration {
+        Integration::Hue(hue) => print!("in action {:?}", hue.get_lights()),
+        _ => (),
+      }),
+    };
 
-    // self.devices.iter().for_each(|device| {
-    //   if device.name() == action.device_name {
-    //     (action.action)(device.device as Box<HueBridge>);
-    //   }
-    // });
+    self
+      .integrations
+      .iter_mut()
+      .for_each(|integration| (action.callback)(integration));
   }
 }

@@ -1,15 +1,14 @@
 mod generic_device;
+use crate::integrations::HueBridge;
 pub use generic_device::{GenericDevice, GenericResult};
 
-pub struct Device {
-  pub device: Box<dyn GenericDevice>,
+pub struct Device<Type> {
+  pub device: Type,
 }
 
-impl Device {
-  pub fn new(device: impl GenericDevice + 'static) -> Device {
-    Device {
-      device: Box::new(device),
-    }
+impl Device<HueBridge> {
+  pub fn new<Type>(device: Type) -> Device<Type> {
+    Device::<Type> { device: device }
   }
 
   pub fn name(&self) -> String {
