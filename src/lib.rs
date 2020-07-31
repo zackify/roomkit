@@ -1,3 +1,6 @@
+mod home;
+pub use home::Home;
+
 pub mod device;
 pub mod integrations;
 

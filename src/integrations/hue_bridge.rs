@@ -1,4 +1,4 @@
-use crate::device::{GenericDevice, GenericResult};
+use crate::device::{Device, GenericDevice, GenericResult};
 use reqwest;
 use serde_derive::Deserialize;
 use std::collections::HashMap;
@@ -28,6 +28,12 @@ struct HueLightsResponse {
 type LightResponse = HashMap<String, HueLightsResponse>;
 
 impl HueBridge {
+  pub fn create(bridge_url: String) -> Device {
+    Device::new(HueBridge {
+      light_ids: None,
+      bridge_url: bridge_url,
+    })
+  }
   fn get_lights(&mut self) -> reqwest::Result<LightResponse> {
     let lights_endpoint = format!("{}{}", &self.bridge_url, "/lights");
     let body: LightResponse = reqwest::blocking::get(&lights_endpoint)?.json()?;
@@ -39,17 +45,13 @@ impl HueBridge {
 }
 
 impl GenericDevice for HueBridge {
+  fn name(&self) -> String {
+    "Hue Bridge".to_string()
+  }
   fn initialize(&mut self) -> GenericResult {
     match self.get_lights() {
-      Err(e) => {
-        println!("error = {:?}", e);
-
-        Err("Unable to request hue bridge".into())
-      }
-      Ok(body) => {
-        println!("body = {:?}", body);
-        Ok(())
-      }
+      Err(e) => Err(format!("Unable to request hue bridge {:?}", e)),
+      Ok(_) => Ok(()),
     }
   }
 }
