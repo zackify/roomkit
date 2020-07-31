@@ -30,7 +30,7 @@ type LightResponse = HashMap<String, HueLightsResponse>;
 
 impl HueBridge {
   pub fn create(bridge_url: String) -> Integration {
-    Integration::Hue(HueBridge {
+    Integration::HueBridge(HueBridge {
       light_ids: None,
       bridge_url: bridge_url,
     })
