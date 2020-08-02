@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Room {
   pub name: String,
   pub people_inside: usize,

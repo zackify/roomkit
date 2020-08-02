@@ -4,6 +4,7 @@ use reqwest;
 use serde_derive::Deserialize;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct HueBridge {
   /*
     You need to create a new hue username, and use the full url

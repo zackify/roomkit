@@ -4,6 +4,10 @@ use crate::device::GenericDevice;
 use crate::integrations::Integration;
 pub use room::Room;
 
+mod test_action;
+use test_action::test_action;
+
+#[derive(Debug)]
 pub struct Home {
   pub rooms: Vec<Room>,
   pub integrations: Vec<Integration>,
@@ -23,18 +27,6 @@ impl Home {
         Err(e) => println!("Failed to initialize {:?}: {:?}", integration.name(), e),
       });
 
-    // find a way to write one that checks if room empty then hue light, etc use match
-    // to run methods from multiple devices
-    let mut action = Action {
-      callback: Box::new(|integration| match integration {
-        Integration::HueBridge(hue) => print!("in action {:?}", hue.get_lights()),
-        // => (),
-      }),
-    };
-
-    self
-      .integrations
-      .iter_mut()
-      .for_each(|integration| (action.callback)(integration));
+    test_action(self);
   }
 }

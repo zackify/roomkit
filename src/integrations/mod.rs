@@ -2,6 +2,7 @@ mod hue_bridge;
 use crate::device::{GenericDevice, GenericResult};
 pub use hue_bridge::HueBridge;
 
+#[derive(Debug)]
 pub enum Integration {
   HueBridge(HueBridge),
 }
