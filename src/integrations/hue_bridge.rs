@@ -1,7 +1,7 @@
-use crate::device::{GenericDevice, GenericResult};
-use crate::integrations::Integration;
+use crate::integrations::GenericIntegration;
 use reqwest;
 use serde_derive::Deserialize;
+use std::any::Any;
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -30,11 +30,14 @@ pub struct HueLightsResponse {
 type LightResponse = HashMap<String, HueLightsResponse>;
 
 impl HueBridge {
-  pub fn create(bridge_url: String) -> Integration {
-    Integration::HueBridge(HueBridge {
+  pub fn create(bridge_url: String) -> Box<dyn Any> {
+    let mut instance = HueBridge {
       light_ids: None,
       bridge_url: bridge_url,
-    })
+    };
+    instance.initialize();
+
+    Box::new(instance)
   }
   pub fn get_lights(&mut self) -> reqwest::Result<LightResponse> {
     let lights_endpoint = format!("{}{}", &self.bridge_url, "/lights");
@@ -46,14 +49,14 @@ impl HueBridge {
   }
 }
 
-impl GenericDevice for HueBridge {
+impl GenericIntegration for HueBridge {
   fn name(&self) -> String {
     "Hue Bridge".to_string()
   }
-  fn initialize(&mut self) -> GenericResult {
+  fn initialize(&mut self) {
     match self.get_lights() {
-      Err(e) => Err(format!("Unable to request hue bridge {:?}", e)),
-      Ok(_) => Ok(()),
+      Err(e) => println!("Unable to request hue bridge {:?}", e),
+      _ => (),
     }
   }
 }

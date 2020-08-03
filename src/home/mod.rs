@@ -1,32 +1,40 @@
 mod room;
-use crate::action_types::Action;
-use crate::device::GenericDevice;
-use crate::integrations::Integration;
 pub use room::Room;
+use std::any::Any;
 
 mod test_action;
 use test_action::test_action;
 
-#[derive(Debug)]
 pub struct Home {
   pub rooms: Vec<Room>,
-  pub integrations: Vec<Integration>,
+  pub integrations: Vec<Box<dyn Any>>,
 }
 
 impl Home {
   pub fn initialize(&mut self) {
     println!("Bringing {:?} devices online...", self.integrations.len());
 
-    self
-      .integrations
-      .iter_mut()
-      .for_each(|integration| match integration.initialize() {
-        Ok(_) => {
-          println!("Initialized {:?}", integration.name());
-        }
-        Err(e) => println!("Failed to initialize {:?}: {:?}", integration.name(), e),
-      });
-
     test_action(self);
+  }
+
+  pub fn integration<Integration>(&mut self) -> Option<&Integration>
+  where
+    Integration: 'static,
+  {
+    let found = self.integrations.iter().find(|integration| {
+      match integration.downcast_ref::<Integration>() {
+        Some(_) => true,
+        None => false,
+      }
+    });
+    if let Some(integration) = found {
+      if let Some(real_ref) = integration.downcast_ref::<Integration>() {
+        return Some(real_ref);
+      } else {
+        None
+      }
+    } else {
+      return None;
+    }
   }
 }

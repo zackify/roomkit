@@ -1,23 +1,9 @@
 mod hue_bridge;
-use crate::device::{GenericDevice, GenericResult};
 pub use hue_bridge::HueBridge;
 
-#[derive(Debug)]
-pub enum Integration {
-  HueBridge(HueBridge),
-}
+pub type GenericResult = Result<(), String>;
 
-impl GenericDevice for Integration {
-  fn name(&self) -> String {
-    match self {
-      Integration::HueBridge(hue) => hue.name(),
-      //_ => "".into(),
-    }
-  }
-  fn initialize(&mut self) -> GenericResult {
-    match self {
-      Integration::HueBridge(hue) => hue.initialize(),
-      //_ => Ok(()),
-    }
-  }
+pub trait GenericIntegration {
+  fn name(&self) -> String;
+  fn initialize(&mut self);
 }

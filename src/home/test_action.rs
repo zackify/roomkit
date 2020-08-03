@@ -1,13 +1,12 @@
 use crate::home::Home;
-use crate::integrations::Integration;
+use crate::integrations::HueBridge;
 
-//try to make this check if someone is in a room then do something else
+// try to make this check if someone is in a room then do something else
+// add second action type that takes a room struct, that you pass in to did enter
+// or did leave
+// register
 pub fn test_action(home: &mut Home) {
-  home
-    .integrations
-    .iter_mut()
-    .for_each(|integration| match integration {
-      Integration::HueBridge(hue) => print!("in action {:?}", hue.light_ids),
-      // => (),
-    });
+  if let Some(hue) = home.integration::<HueBridge>() {
+    print!("in action {:?}", hue.light_ids)
+  }
 }

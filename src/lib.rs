@@ -1,8 +1,6 @@
-pub mod action_types;
 mod home;
 pub use home::Home;
 pub use home::Room;
-pub mod device;
 pub mod integrations;
 
 #[cfg(test)]
