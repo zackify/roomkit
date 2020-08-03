@@ -1,8 +1,10 @@
 use crate::integrations::GenericIntegration;
 use reqwest;
+mod toggle_light;
 use serde_derive::Deserialize;
 use std::any::Any;
 use std::collections::HashMap;
+pub use toggle_light::toggle_light;
 
 #[derive(Debug)]
 pub struct HueBridge {

@@ -1,4 +1,6 @@
-mod hue_bridge;
+#[cfg(feature = "hue_bridge")]
+pub mod hue_bridge;
+#[cfg(feature = "hue_bridge")]
 pub use hue_bridge::HueBridge;
 
 pub type GenericResult = Result<(), String>;

@@ -5,8 +5,9 @@ use crate::integrations::HueBridge;
 // add second action type that takes a room struct, that you pass in to did enter
 // or did leave
 // register
-pub fn test_action(home: &mut Home) {
+pub fn toggle_light(home: &mut Home) {
+  // grab our active hue bridge integration and print the light ids
   if let Some(hue) = home.integration::<HueBridge>() {
-    print!("in action {:?}", hue.light_ids)
+    println!("in action {:?}", hue.light_ids)
   }
 }
