@@ -1,5 +1,5 @@
 mod room;
-use crate::integrations::hue_bridge::toggle_light;
+// use crate::integrations::hue_bridge::toggle_light;
 pub use room::Room;
 use std::any::Any;
 
@@ -12,7 +12,7 @@ impl Home {
   pub fn initialize(&mut self) {
     println!("Bringing {:?} devices online...", self.integrations.len());
 
-    toggle_light(self);
+    //toggle_light(self);
   }
 
   pub fn integration<Integration>(&mut self) -> Option<&Integration>
