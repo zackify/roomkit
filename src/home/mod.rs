@@ -15,6 +15,14 @@ impl Home {
     //toggle_light(self);
   }
 
+  /*
+    pull out a single integration from our vector
+    use downcasting to check for the correct integration!!!
+    this took me a long time to figure out, I wanted to make
+    integrations dynamic, and follow a trait, and not have to use
+    an enum internally, this way other people can make an integration
+    without this internal library knowing about it
+  */
   pub fn integration<Integration>(&mut self) -> Option<&Integration>
   where
     Integration: 'static,
