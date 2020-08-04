@@ -1,6 +1,5 @@
-mod room;
-// use crate::integrations::hue_bridge::toggle_light;
-pub use room::Room;
+//use crate::integrations::hue_bridge::toggle_light;
+pub use crate::room::Room;
 use std::any::Any;
 
 pub struct Home {

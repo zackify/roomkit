@@ -62,3 +62,24 @@ impl GenericIntegration for HueBridge {
     }
   }
 }
+
+#[cfg(test)]
+mod tests {
+  use crate::integrations::GenericIntegration;
+  use crate::integrations::HueBridge;
+
+  #[test]
+  fn test_creating_hue_bridge() {
+    let hue = HueBridge {
+      light_ids: None,
+      bridge_url: "http://192.168.86.30/api/test".into(),
+    };
+
+    assert_eq!(hue.name(), "Hue Bridge");
+    assert_eq!(hue.light_ids, None);
+    assert_eq!(
+      hue.bridge_url,
+      String::from("http://192.168.86.30/api/test")
+    );
+  }
+}
